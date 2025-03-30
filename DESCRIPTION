@@ -1,0 +1,29 @@
+Package: titanicShinySurvivR
+Title: Interactive Titanic Survival Prediction App and ML Pipeline
+Version: 0.0.0.9000
+Authors@R: 
+    person("Alphonse", "Kwizera", email = "kaizera.dev@outlook.com", role = c("aut", "cre"))
+Description: Provides an interactive Shiny application and supporting functions 
+    for exploring Titanic passenger data and predicting survival outcomes using 
+    machine learning models. Includes tools for data preprocessing, feature 
+    engineering, model training, evaluation, and UI integration. Designed as a 
+    hands-on project for learning the core components of end-to-end 
+    classification workflows in R.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports:
+    shiny,
+    dplyr,
+    ggplot2,
+    recipes,
+    magrittr,
+    pROC,
+    stats,
+    rlang
+Suggests:
+    testthat,
+    rpart,
+    randomForest,
+    readr
