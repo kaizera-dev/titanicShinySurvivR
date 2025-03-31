@@ -11,15 +11,28 @@ server <- function(input, output, session) {
   })
 
   reactive_titanic <- reactive({
+    req(current_data())
+
     if (current_data() == "default") {
-      readr::read_csv(system.file("extdata", "train.csv", package = "titanicShinySurvivR"))
+      # Check if 'train' is available in the package's data
+      available_data <- data(package = "titanicShinySurvivR")$results[, "Item"]
+      validate(need("train" %in% available_data, "Example dataset 'train' is not available."))
+
+      # Load it safely into this reactive environment
+      data("train", package = "titanicShinySurvivR", envir = environment())
+      train
+
     } else if (current_data() == "upload") {
       req(input$upload)
       readr::read_csv(input$upload$datapath)
+
     } else {
       NULL
     }
   })
+
+
+
 
   observeEvent(reactive_titanic(), {
 
@@ -170,8 +183,11 @@ server <- function(input, output, session) {
 
   output$intro <- renderUI({
     HTML("
+    <h2>To The Testers...</h2>
+    <p>Thank you for taking the time to test my app. There is no need to spend all day looking for bugs, I do appreciate you all have lives outside the scope of my hoop dreams.</p>
+    <p> I should have sent you all a list of 5 questions to answer when testing this app, plus a question about how you would like to be referred to in the thank you note I will leave in the intro tab of this app (the tab you are on currently).</p>
     <h3>Welcome to Titanic SurvivR!</h3>
-    <p>Thank you for taking the time to check out my first-ever project, <strong>Titanic SurvivR</strong>! This Shiny app is based on the infamous Kaggle Titanic competition—with a twist: you get to find out whether <em>you</em> would have survived the sinking.</p>
+    <p>Thank you for taking the time to check out my first-ever project, <strong>Titanic SurvivR</strong>! This Shiny app is based on the classic Kaggle Titanic competition—with a twist: you get to find out whether <em>you</em> would have survived the sinking.</p>
 
     <h4>🚀 How to Use Titanic SurvivR</h4>
     <ol>
@@ -192,8 +208,7 @@ server <- function(input, output, session) {
   <li><strong>Model Insights:</strong> Visual tools like ROC-AUC to better understand model behavior.</li>
 </ul>
     <h4>💡 Why I Built This</h4>
-    <p>The goal of this project was to explore the <strong>Shiny framework</strong> and get hands-on with applied <strong>machine learning and statistics</strong> in R. It really has helped me learn a lot in both fields. Looking back to when I first started,</p>
-    if you had told me ROC-AUC was a Star Wars character, I would have believed you.</p>
+    <p>The goal of this project was to explore the <strong>Shiny framework</strong> and get hands-on with applied <strong>machine learning and statistics</strong> in R. It really has helped me learn a lot in both fields. Looking back to when I first started, if you had told me ROC-AUC was a Star Wars character, I would have believed you.</p>
 
     <p>Thanks again for checking this out!</p>
   ")

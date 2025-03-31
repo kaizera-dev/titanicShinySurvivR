@@ -1,0 +1,1 @@
+titanicShinySurvivR::launch_titanic_survivr_app()

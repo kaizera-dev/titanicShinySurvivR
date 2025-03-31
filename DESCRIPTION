@@ -1,6 +1,6 @@
 Package: titanicShinySurvivR
 Title: Interactive Titanic Survival Prediction App and ML Pipeline
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     person("Alphonse", "Kwizera", email = "kaizera.dev@outlook.com", role = c("aut", "cre"))
 Description: Provides an interactive Shiny application and supporting functions 
@@ -27,3 +27,6 @@ Suggests:
     rpart,
     randomForest,
     readr
+Depends: 
+    R (>= 3.5)
+LazyData: true

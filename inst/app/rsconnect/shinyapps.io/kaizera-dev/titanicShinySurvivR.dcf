@@ -1,0 +1,10 @@
+name: titanicShinySurvivR
+title:
+username: kaizera-dev
+account: kaizera-dev
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 14377187
+bundleId:
+url: https://kaizera-dev.shinyapps.io/titanicShinySurvivR/
+version: 1

@@ -44,5 +44,6 @@ The aim of this project wasn`t just about building a Titanic app—it was to sim
 
 ```r
 # install.packages("devtools")
-devtools::install_github("yourusername/titanicShinySurvivR")
+devtools::install_github("kaizera-dev/titanicShinySurvivR")
 titanicShinySurvivR::launch_app()
+
