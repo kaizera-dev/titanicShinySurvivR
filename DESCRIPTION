@@ -21,7 +21,8 @@ Imports:
     magrittr,
     pROC,
     stats,
-    rlang
+    rlang,
+    rsample
 Suggests:
     testthat,
     rpart,
