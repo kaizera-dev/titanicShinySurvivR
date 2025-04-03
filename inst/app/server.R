@@ -36,7 +36,7 @@ server <- function(input, output, session) {
 
   observeEvent(reactive_titanic(), {
 
-    validation_error <- validate_titanic_data(reactive_titanic())
+    validation_error <- titanicShinySurvivR::validate_titanic_data(reactive_titanic())
 
     if (!is.null(validation_error)) {
       showNotification(validation_error, type = "error", duration = NULL)
@@ -124,7 +124,7 @@ server <- function(input, output, session) {
   conf_mx <- reactive({
     req(model_list())
 
-    create_confusion_matrix(model_list = model_list(),
+    titanicShinySurvivR::create_confusion_matrix(model_list = model_list(),
                             testing_data = prepped_test(),
                             class_threshold = input$threshold)
 
@@ -132,7 +132,7 @@ server <- function(input, output, session) {
 
   output$confus <- renderTable({
 
-    generate_confusion_matrix_summary(conf_mx())
+    titanicShinySurvivR::generate_confusion_matrix_summary(conf_mx())
   })
 
   user_data <- reactive({
@@ -160,7 +160,7 @@ server <- function(input, output, session) {
 
   output$pred <- renderText({
 
-    predict_user_outcome(model_list = model_list(),
+    titanicShinySurvivR::predict_user_outcome(model_list = model_list(),
                          selected_model = input$model,
                          user_data = prepped_user_data(),
                          threshold = input$threshold)
@@ -168,17 +168,17 @@ server <- function(input, output, session) {
 
   output$insights <- renderText({
 
-    format_model_insights(conf_mx())
+    titanicShinySurvivR::format_model_insights(conf_mx())
   })
 
   output$survival_plot <- renderPlot({
-    plot_survival_metric(reactive_titanic(), input$metric)
+    titanicShinySurvivR::plot_survival_metric(reactive_titanic(), input$metric)
   })
 
   output$auc_roc <- renderPlot({
-    plot_roc_auc(prepped_test(),
-                 model_list(),
-                 input$model)
+    titanicShinySurvivR::plot_roc_auc(prepped_test(),
+                                      model_list(),
+                                      input$model)
   })
 
   output$intro <- renderUI({
