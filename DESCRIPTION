@@ -22,11 +22,11 @@ Imports:
     pROC,
     stats,
     rlang,
-    rsample
+    rsample,
+    randomForest,
+    rpart
 Suggests:
     testthat,
-    rpart,
-    randomForest,
     readr
 Depends: 
     R (>= 3.5)
