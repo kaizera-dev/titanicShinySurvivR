@@ -1,5 +1,7 @@
 
-ui <- fluidPage(
+titanic_ui <- function() {
+
+  fluidPage(
   titlePanel("Titanic SurvivR (Beta)"),
   sidebarLayout(
     sidebarPanel(
@@ -62,3 +64,4 @@ ui <- fluidPage(
     )
   )
 )
+}

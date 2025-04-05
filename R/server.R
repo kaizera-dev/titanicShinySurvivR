@@ -1,4 +1,4 @@
-server <- function(input, output, session) {
+titanic_server <- function(input, output, session) {
 
   current_data <- reactiveVal("")
 

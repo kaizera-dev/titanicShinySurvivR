@@ -3,5 +3,8 @@
 #' Runs Titanic SurvivR.
 #' @export
 launch_titanic_survivr_app <- function() {
-  shiny::runApp(system.file("app", package = "titanicShinySurvivR"))
+  shiny::shinyApp(
+    ui = titanic_ui(),
+    server = titanic_server
+  )
 }
