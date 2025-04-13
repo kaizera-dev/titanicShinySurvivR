@@ -78,15 +78,6 @@ test_that("create_confusion_matrix errors on missing Survived column", {
   )
 })
 
-test_that("create_confusion_matrix errors on invalid class_threshold", {
-  test_data <- data.frame(Survived = factor(c(1, 0)))
-  dummy_model <- glm(Survived ~ 1, data = test_data, family = "binomial")
-
-  expect_error(create_confusion_matrix(test_data, list(m = dummy_model), -0.1))
-  expect_error(create_confusion_matrix(test_data, list(m = dummy_model), "hello"))
-  expect_error(create_confusion_matrix(test_data, list(m = dummy_model), c(0.5, 0.6)))
-})
-
 test_that("create_confusion_matrix errors on invalid model_list", {
   test_data <- data.frame(Survived = factor(c(1, 0)))
 

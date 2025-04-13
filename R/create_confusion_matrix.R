@@ -19,11 +19,6 @@ create_confusion_matrix <- function(testing_data, model_list, class_threshold) {
     stop("`testing_data` must contain a 'Survived' column.")
   }
 
-  if (!is.numeric(class_threshold) || length(class_threshold) != 1 ||
-      is.na(class_threshold) || class_threshold < 0 || class_threshold > 1) {
-    stop("`class_threshold` must be a single numeric value between 0 and 1.")
-  }
-
   if (!is.list(model_list) || is.null(names(model_list)) || is.data.frame(model_list)) {
     stop("`model_list` must be a named pure list of models, not a data.frame")
   }

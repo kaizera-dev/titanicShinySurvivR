@@ -36,7 +36,6 @@ preprocess_titanic_data <- function(train_data, test_data) {
   train_prepped <- suppressWarnings(recipes::bake(prepped_recipe, new_data = train_data))
   test_prepped <- suppressWarnings(recipes::bake(prepped_recipe, new_data = test_data))
 
-
   return(list(train = train_prepped,
               test = test_prepped,
               recipe = prepped_recipe))

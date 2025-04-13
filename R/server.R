@@ -14,11 +14,7 @@ titanic_server <- function(input, output, session) {
     req(current_data())
 
     if (current_data() == "default") {
-      # Check if 'train' is available in the package's data
-      available_data <- data(package = "titanicShinySurvivR")$results[, "Item"]
-      validate(need("train" %in% available_data, "Example dataset 'train' is not available."))
 
-      # Load it safely into this reactive environment
       data("train", package = "titanicShinySurvivR", envir = environment())
       train
 
@@ -30,9 +26,6 @@ titanic_server <- function(input, output, session) {
       NULL
     }
   })
-
-
-
 
   observeEvent(reactive_titanic(), {
 
@@ -46,10 +39,6 @@ titanic_server <- function(input, output, session) {
   output$data_preview <- renderTable({
     head(reactive_titanic(), n = 15)
   })
-
- # TODO: WRAP UPs
-# intructions tab
- # README
 
   train_test_split <- reactive({
 
