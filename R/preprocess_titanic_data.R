@@ -22,9 +22,8 @@ preprocess_titanic_data <- function(train_data, test_data) {
   train_data$Fare <- as.double(train_data$Fare)
 
   general_recipe <- recipes::recipe(Survived ~ ., data = train_data) %>%
-    recipes::step_impute_median(Age) %>%
-    recipes::step_impute_knn(Fare) %>%
-    recipes::step_impute_mode(Embarked) %>%
+    recipes::step_impute_median(SibSp, Parch, Age, Fare) %>%
+    recipes::step_impute_mode(Embarked, Pclass) %>%
     recipes::step_mutate(HaveCabin = as.factor(ifelse(is.na(Cabin), 0, 1))) %>%
     recipes::step_mutate(CabinDeck = dplyr::if_else(is.na(Cabin), "U", substr(Cabin, 1, 1))) %>%
     recipes::step_mutate(FamilySize = SibSp + Parch + 1) %>%
