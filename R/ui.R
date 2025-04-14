@@ -26,9 +26,9 @@ titanic_ui <- function() {
                               "C Deck" = "C", "D Deck" = "D", "E Deck" = "E",
                               "F Deck" = "F", "G Deck" = "G")),
       selectInput("model", "Select Prediction Model:",
-                  choices = c("Logistic Regression" = "Logistic Regression",
-                              "Decision Tree" = "Decision Tree",
-                              "Random Forest" = "Random Forest")),
+                  choices = c("Logistic Regression",
+                              "Decision Tree",
+                              "Random Forest")),
       checkboxInput("show_advanced", "Show Advanced Options", value = FALSE),
       conditionalPanel(
         condition = "input.show_advanced == true",
@@ -44,10 +44,17 @@ titanic_ui <- function() {
                  uiOutput("intro")),
         tabPanel("Prediction",
                  verbatimTextOutput("pred")),
-        tabPanel("Data Visualisation",
+        tabPanel("Survival Patterns",
                  plotOutput("survival_plot"),
                  selectInput("metric", "Choose Plot Metric:",
-                              choices = c("Pclass", "Sex", "Cabin", "Embarked", "Age", "Fare", "SibSp", "Parch"))
+                              choices = c("Passenger Class" = "Pclass",
+                                          "Sex",
+                                          "Cabin Deck" = "Cabin",
+                                          "Port of Embarkation" = "Embarked",
+                                          "Age",
+                                          "Fare",
+                                          "Number of Siblings/Spouses Aboard" = "SibSp",
+                                          "Number of Parents/Children Aboard:" = "Parch"))
                  ),
         tabPanel("Confusion Matrix",
                  tableOutput("confus")),
@@ -57,7 +64,7 @@ titanic_ui <- function() {
         tabPanel("Data Preview",
                  tableOutput("data_preview")),
         tabPanel("Titanic Deck Layout",
-                 img(src = "www/titanic_layout.jpg", height = "300px", width = "300px"))
+                 imageOutput("DeckImage"))
       )
     )
   )

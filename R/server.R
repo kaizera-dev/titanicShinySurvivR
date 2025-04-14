@@ -203,5 +203,12 @@ titanic_server <- function(input, output, session) {
   ")
   })
 
+  output$DeckImage <- renderImage({
+    list(src = "titanic layout/titanic_layout.jpg",
+         contentType = 'image/png',
+         width = 525,
+         height = 800,
+         alt = "My image")
+  }, deleteFile = FALSE)
 
 }
