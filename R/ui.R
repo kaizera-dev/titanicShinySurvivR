@@ -22,7 +22,7 @@ titanic_ui <- function() {
       selectInput("embark", "Port of Embarkation:",
                   choices = c("Cherbourg" = "C", "Queenstown" = "Q", "Southampton" = "S")),
       selectInput("cabin_deck", "Cabin Deck:",
-                  choices = c("Any" = "U", "A Deck" = "A", "B Deck" = "B",
+                  choices = c("Any / Unknown" = "U", "A Deck" = "A", "B Deck" = "B",
                               "C Deck" = "C", "D Deck" = "D", "E Deck" = "E",
                               "F Deck" = "F", "G Deck" = "G")),
       selectInput("model", "Select Prediction Model:",
@@ -54,7 +54,7 @@ titanic_ui <- function() {
                                           "Age",
                                           "Fare",
                                           "Number of Siblings/Spouses Aboard" = "SibSp",
-                                          "Number of Parents/Children Aboard:" = "Parch"))
+                                          "Number of Parents/Children Aboard" = "Parch"))
                  ),
         tabPanel("Confusion Matrix",
                  tableOutput("confus")),

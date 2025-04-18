@@ -20,7 +20,7 @@ predict_user_outcome <- function(model_list,
   }
 
   if (!selected_model %in% names(model_list)) {
-    stop("`selected_model` must be one of the names in `model_list`.")
+    stop("`selected_model` must be one of the names in `model_List`.")
   }
 
   if (!is.data.frame(user_data)) {
@@ -36,7 +36,7 @@ predict_user_outcome <- function(model_list,
   prob <- if (inherits(chosen_model_obj, "glm")) {
     as.numeric(predict(chosen_model_obj, newdata = user_data, type = "response"))
   } else if (inherits(chosen_model_obj, "rpart") || inherits(chosen_model_obj, "randomForest")) {
-    as.numeric(predict(chosen_model_obj, newdata = user_data, type = "prob")[, "1"])
+    as.numeric(predict(chosen_model_obj, newdata = user_data, type = "prob")[ ,"1"])
   } else {
     stop("Unsupported model type. Supported types: glm, rpart, randomForest.")
   }
@@ -46,4 +46,7 @@ predict_user_outcome <- function(model_list,
   paste("Selected Model:", selected_model,
         "\nOutcome:", predicted_class,
         "\nSurvival Probability:", round(prob, 3))
+
 }
+
+

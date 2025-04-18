@@ -67,15 +67,12 @@ titanic_server <- function(input, output, session) {
   prepped_test <- reactive({prepped_data()$test})
   prepped_recipe <- reactive({prepped_data()$recipe})
 
-# Models ----
-
   LR <- reactive({
     req(prepped_train())
 
     MASS::stepAIC(glm(Survived ~ .,
                       data = prepped_train(),
-                      family = "binomial",
-                      na.action = na.exclude),
+                      family = "binomial"),
                   direction = "both",
                   trace = FALSE)
   })
@@ -89,14 +86,15 @@ titanic_server <- function(input, output, session) {
                  control = rpart::rpart.control(cp = 0))
   })
 
-  rand_Forest <- reactive({
+  rand_forest <- reactive({
     req(prepped_train())
 
     randomForest::randomForest(
       Survived ~ .,
       data = prepped_train(),
       ntree = 500,
-      mtry = sqrt(ncol(prepped_train()))
+      mtry = sqrt(ncol(prepped_train())),
+      na.action = na.omit
     )
   })
 
@@ -105,10 +103,9 @@ titanic_server <- function(input, output, session) {
     list(
       `Logistic Regression` = LR(),
       `Decision Tree` = dec_tree(),
-      `Random Forest` = rand_Forest()
+      `Random Forest` = rand_forest()
     )
   })
-  # ----
 
   conf_mx <- reactive({
     req(model_list())
@@ -148,6 +145,7 @@ titanic_server <- function(input, output, session) {
   })
 
   output$pred <- renderText({
+req(model_list(), input$model, prepped_user_data(), input$threshold)
 
     titanicShinySurvivR:::predict_user_outcome(model_list = model_list(),
                          selected_model = input$model,
@@ -156,7 +154,6 @@ titanic_server <- function(input, output, session) {
   })
 
   output$insights <- renderText({
-
     titanicShinySurvivR:::format_model_insights(conf_mx())
   })
 
@@ -172,13 +169,10 @@ titanic_server <- function(input, output, session) {
 
   output$intro <- renderUI({
     HTML("
-    <h2>To The Testers...</h2>
-    <p>Thank you for taking the time to test my app. There is no need to spend all day looking for bugs, I do appreciate you all have lives outside the scope of my hoop dreams.</p>
-    <p> I should have sent you all a list of 5 questions to answer when testing this app, plus a question about how you would like to be referred to in the thank you note I will leave in the intro tab of this app (the tab you are on currently).</p>
-    <h3>Welcome to Titanic SurvivR!</h3>
+    <h2>Welcome to Titanic SurvivR!</h2>
     <p>Thank you for taking the time to check out my first-ever project, <strong>Titanic SurvivR</strong>! This Shiny app is based on the classic Kaggle Titanic competition—with a twist: you get to find out whether <em>you</em> would have survived the sinking.</p>
 
-    <h4>🚀 How to Use Titanic SurvivR</h4>
+    <h3>🚀 How to Use Titanic SurvivR</h3>
     <ol>
       <li>Click the <code>Use Example Data</code> button on the left to load the dataset and train the models.</li>
       <li>Enter your passenger details in the sidebar.</li>
@@ -188,7 +182,7 @@ titanic_server <- function(input, output, session) {
 
     <p>You can also upload your own dataset if you'd like to experiment.</p>
 
-    <h4>📂 What the Tabs Do</h4>
+    <h3>📂 What the Tabs Do</h3>
 <ul>
   <li><strong>Data Preview:</strong> See the raw dataset used to train and test the model.</li>
   <li><strong>Prediction:</strong> View your survival outcome based on the inputs you selected.</li>
@@ -196,7 +190,7 @@ titanic_server <- function(input, output, session) {
   <li><strong>Confusion Matrix:</strong> Check how well each model performs on test data.</li>
   <li><strong>Model Insights:</strong> Visual tools like ROC-AUC to better understand model behavior.</li>
 </ul>
-    <h4>💡 Why I Built This</h4>
+    <h3>💡 Why I Built This</h3>
     <p>The goal of this project was to explore the <strong>Shiny framework</strong> and get hands-on with applied <strong>machine learning and statistics</strong> in R. It really has helped me learn a lot in both fields. Looking back to when I first started, if you had told me ROC-AUC was a Star Wars character, I would have believed you.</p>
 
     <p>Thanks again for checking this out!</p>

@@ -19,10 +19,11 @@ preprocess_titanic_data <- function(train_data, test_data) {
   train_data$Pclass <- as.factor(train_data$Pclass)
   train_data$Sex <- as.factor(train_data$Sex)
   train_data$Embarked <- as.factor(train_data$Embarked)
-  train_data$Fare <- as.double(train_data$Fare)
+  train_data$Fare <- as.numeric(train_data$Fare)
+  train_data$Age <- as.numeric(train_data$Age)
 
   general_recipe <- recipes::recipe(Survived ~ ., data = train_data) %>%
-    recipes::step_impute_median(SibSp, Parch, Age, Fare) %>%
+    recipes::step_impute_median(SibSp, Parch, Fare) %>%
     recipes::step_impute_mode(Embarked, Pclass) %>%
     recipes::step_mutate(HaveCabin = as.factor(ifelse(is.na(Cabin), 0, 1))) %>%
     recipes::step_mutate(CabinDeck = dplyr::if_else(is.na(Cabin), "U", substr(Cabin, 1, 1))) %>%
