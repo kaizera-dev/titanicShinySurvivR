@@ -83,7 +83,7 @@ titanic_server <- function(input, output, session) {
     rpart::rpart(Survived ~ .,
                  data = prepped_train(),
                  method = "class",
-                 control = rpart::rpart.control(cp = 0))
+                 control = rpart::rpart.control(cp = 0.001))
   })
 
   rand_forest <- reactive({
@@ -92,14 +92,14 @@ titanic_server <- function(input, output, session) {
     randomForest::randomForest(
       Survived ~ .,
       data = prepped_train(),
-      ntree = 500,
-      mtry = sqrt(ncol(prepped_train())),
+      ntree = 600,
+      mtry = sqrt(ncol(prepped_train())) + 2,
       na.action = na.omit
     )
   })
 
   model_list <- reactive({
-    req(LR(), dec_tree())
+    req(LR(), dec_tree(), rand_forest())
     list(
       `Logistic Regression` = LR(),
       `Decision Tree` = dec_tree(),
@@ -116,7 +116,7 @@ titanic_server <- function(input, output, session) {
 
   })
 
-  output$confus <- renderTable({
+  output$confus <- renderText({
 
     titanicShinySurvivR:::generate_confusion_matrix_summary(conf_mx())
   })
@@ -153,28 +153,32 @@ req(model_list(), input$model, prepped_user_data(), input$threshold)
                          threshold = input$threshold)
   })
 
-  output$insights <- renderText({
-    titanicShinySurvivR:::format_model_insights(conf_mx())
-  })
-
   output$survival_plot <- renderPlot({
     titanicShinySurvivR:::plot_survival_metric(reactive_titanic(), input$metric)
   })
 
-  output$auc_roc <- renderPlot({
+  roc_auc_output <- reactive({
     titanicShinySurvivR:::plot_roc_auc(prepped_test(),
-                                      model_list(),
-                                      input$model)
+                                        model_list(),
+                                        input$model)
+  })
+
+  output$roc_auc_graph <- renderPlot({
+    roc_auc_output()$graph
+  })
+
+  output$roc_auc_value <- renderText({
+    paste0("AUC:", roc_auc_output()$value)
   })
 
   output$intro <- renderUI({
     HTML("
     <h2>Welcome to Titanic SurvivR!</h2>
-    <p>Thank you for taking the time to check out my first-ever project, <strong>Titanic SurvivR</strong>! This Shiny app is based on the classic Kaggle Titanic competition—with a twist: you get to find out whether <em>you</em> would have survived the sinking.</p>
+    <p>Thank you for taking the time to check out my first ever project, <strong>Titanic SurvivR</strong>! This Shiny app is based on the classic Kaggle Titanic competition—with a twist: you get to find out whether <em>you</em> would have survived the sinking.</p>
 
     <h3>🚀 How to Use Titanic SurvivR</h3>
     <ol>
-      <li>Click the <code>Use Example Data</code> button on the left to load the dataset and train the models.</li>
+      <li>Click the <code>Use Kaggle Data</code> button on the left to load the dataset and train the models.</li>
       <li>Enter your passenger details in the sidebar.</li>
       <li>Select a prediction model.</li>
       <li>Click on the <strong>Prediction</strong> tab to see your results.</li>
@@ -184,12 +188,15 @@ req(model_list(), input$model, prepped_user_data(), input$threshold)
 
     <h3>📂 What the Tabs Do</h3>
 <ul>
-  <li><strong>Data Preview:</strong> See the raw dataset used to train and test the model.</li>
-  <li><strong>Prediction:</strong> View your survival outcome based on the inputs you selected.</li>
-  <li><strong>Data Visualisation:</strong> Explore how different features relate to survival.</li>
-  <li><strong>Confusion Matrix:</strong> Check how well each model performs on test data.</li>
-  <li><strong>Model Insights:</strong> Visual tools like ROC-AUC to better understand model behavior.</li>
+  <li><strong>Introduction:</strong> Overview of the app's purpose and how to use it.</li>
+  <li><strong>Prediction:</strong> View your survival outcome based on selected input features.</li>
+  <li><strong>Survival Patterns:</strong> Visualize how specific features relate to survival rates.</li>
+  <li><strong>Confusion Matrix:</strong> See how well each model classifies survival outcomes on test data.</li>
+  <li><strong>ROC-AUC:</strong> Evaluate model discrimination using ROC curves and AUC values.</li>
+  <li><strong>Data Preview:</strong> Examine the raw dataset used for model training and testing.</li>
+  <li><strong>Titanic Deck Layout:</strong> Visual reference of the ship’s deck plan used in feature engineering.</li>
 </ul>
+
     <h3>💡 Why I Built This</h3>
     <p>The goal of this project was to explore the <strong>Shiny framework</strong> and get hands-on with applied <strong>machine learning and statistics</strong> in R. It really has helped me learn a lot in both fields. Looking back to when I first started, if you had told me ROC-AUC was a Star Wars character, I would have believed you.</p>
 

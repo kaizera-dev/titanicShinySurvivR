@@ -24,7 +24,7 @@ create_confusion_matrix <- function(testing_data, model_list, class_threshold) {
   }
 
   actual <- testing_data$Survived
-  confusion_mx_list <- list()
+  conf_mx_list <- list()
 
    for (model_name in names(model_list)) {
   model <- model_list[[model_name]]
@@ -52,10 +52,10 @@ create_confusion_matrix <- function(testing_data, model_list, class_threshold) {
          "These must be equal.")
   }
 
-  confusion_matrix <- as.matrix(table(
+  confusion_matrix <- table(
     Actual = factor(actual, levels = c(0, 1)),
     Predicted = factor(predicted, levels = c(0, 1))
-  ))
+  )
 
   true_positive <- confusion_matrix[2, 2]
   false_positive <- confusion_matrix[2, 1]
@@ -66,7 +66,7 @@ create_confusion_matrix <- function(testing_data, model_list, class_threshold) {
   precision <- true_positive / (true_positive + false_positive)
   recall <- true_positive / (true_positive + false_negative)
 
-  confusion_mx_list[[model_name]] <- list(
+  conf_mx_list[[model_name]] <- list(
     Model = model_name,
     ConfusionMatrix = confusion_matrix,
     Accuracy = accuracy * 100,
@@ -74,6 +74,6 @@ create_confusion_matrix <- function(testing_data, model_list, class_threshold) {
     Recall = recall * 100
   )
    }
-  confusion_mx_list
+  conf_mx_list
 }
 

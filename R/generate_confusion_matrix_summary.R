@@ -12,7 +12,8 @@ generate_confusion_matrix_summary <- function(conf_mx_list) {
     stop("Error: Confusion matrix list is empty or not in the correct format.")
   }
 
-  do.call(rbind, lapply(conf_mx_list, extract_confusion_matrix))
+  paste(lapply(conf_mx_list, extract_confusion_matrix),
+        collapse = "\n\n")
 }
 
 #' Extract Confusion Matrix Values
@@ -26,14 +27,22 @@ generate_confusion_matrix_summary <- function(conf_mx_list) {
 #' @noRd
 extract_confusion_matrix <- function(cm) {
   if (!"ConfusionMatrix" %in% names(cm) || !is.matrix(cm$ConfusionMatrix) || dim(cm$ConfusionMatrix)[1] != 2) {
-    return(data.frame(Model = cm$Model, Error = "Invalid confusion matrix"))
+    return(paste("Model:", cm$Model, "- Invalid confusion matrix"))
   }
 
-  data.frame(
-    Model = cm$Model,
-    True_Negative = cm$ConfusionMatrix[1, 1],
-    False_Negative = cm$ConfusionMatrix[1, 2],
-    False_Positive = cm$ConfusionMatrix[2, 1],
-    True_Positive = cm$ConfusionMatrix[2, 2]
+  mat <- cm$ConfusionMatrix
+  f1 <- 2 * cm$Precision * cm$Recall / (cm$Precision + cm$Recall)
+
+  paste0(
+    "Model: ", cm$Model, "\n",
+    "Confusion Matrix:\n",
+    "            Predicted 0   Predicted 1\n",
+    sprintf("Actual 0:      %3d          %3d\n", mat[1,1], mat[1,2]),
+    sprintf("Actual 1:      %3d          %3d\n", mat[2,1], mat[2,2]),
+    sprintf("Accuracy: %.3f%%\n", cm$Accuracy),
+    sprintf("Precision: %.3f%%\n", cm$Precision),
+    sprintf("Recall: %.3f%%\n", cm$Recall),
+    sprintf("F1 Score: %.3f%%\n", f1)
   )
+
 }

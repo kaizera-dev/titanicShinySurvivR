@@ -23,14 +23,15 @@ preprocess_titanic_data <- function(train_data, test_data) {
   train_data$Age <- as.numeric(train_data$Age)
 
   general_recipe <- recipes::recipe(Survived ~ ., data = train_data) %>%
-    recipes::step_impute_median(SibSp, Parch, Fare) %>%
+    recipes::step_impute_median(SibSp, Parch) %>%
+    recipes::step_impute_linear(Fare) %>%
     recipes::step_impute_mode(Embarked, Pclass) %>%
     recipes::step_mutate(HaveCabin = as.factor(ifelse(is.na(Cabin), 0, 1))) %>%
     recipes::step_mutate(CabinDeck = dplyr::if_else(is.na(Cabin), "U", substr(Cabin, 1, 1))) %>%
+    recipes::step_mutate(CabinDeck = factor(CabinDeck))  %>%
     recipes::step_mutate(FamilySize = SibSp + Parch + 1) %>%
     recipes::step_mutate(IsAlone = dplyr::if_else(FamilySize == 1, 1, 0)) %>%
-    recipes::step_rm(Cabin) %>%
-    recipes::step_mutate(CabinDeck = factor(CabinDeck))
+    recipes::step_rm(Cabin)
 
   prepped_recipe <- suppressWarnings(recipes::prep(general_recipe, training = train_data))
   train_prepped <- suppressWarnings(recipes::bake(prepped_recipe, new_data = train_data))

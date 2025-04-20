@@ -29,7 +29,7 @@ plot_survival_metric <- function(df, metric) {
   if (metric %in% density_plot_metrics) {
 
   ggplot2::ggplot(df, ggplot2::aes(x = .data[[metric]], color = factor(Survived))) +
-      ggplot2::geom_density(size = 1.2) +
+      ggplot2::geom_density(linewidth = 1.2) +
       ggplot2::scale_color_manual(values = c("red", "cyan")) +
       ggplot2::theme_minimal()
 

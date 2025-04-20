@@ -6,7 +6,7 @@ titanic_ui <- function() {
   sidebarLayout(
     sidebarPanel(
       fileInput("upload", "Upload Dataset (.csv Only)", accept = ".csv"),
-      actionButton("default", "Use Example Dataset"),
+      actionButton("default", "Use Kaggle Dataset"),
       selectInput("pclass", "Passenger Class:",
                   choices = c("1st Class" = 1, "2nd Class" = 2, "3rd Class" = 3)),
       selectInput("sex", "Sex:",
@@ -57,10 +57,11 @@ titanic_ui <- function() {
                                           "Number of Parents/Children Aboard" = "Parch"))
                  ),
         tabPanel("Confusion Matrix",
-                 tableOutput("confus")),
-        tabPanel("Model insights",
-                 verbatimTextOutput("insights"),
-                 plotOutput("auc_roc", width = "400px", height = "400px")),
+                 verbatimTextOutput("confus")),
+        tabPanel("ROC-AUC",
+                 plotOutput("roc_auc_graph", width = "400px", height = "400px"),
+                 verbatimTextOutput("roc_auc_value")
+                 ),
         tabPanel("Data Preview",
                  tableOutput("data_preview")),
         tabPanel("Titanic Deck Layout",
