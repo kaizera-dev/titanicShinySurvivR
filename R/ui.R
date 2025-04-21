@@ -32,9 +32,20 @@ titanic_ui <- function() {
       checkboxInput("show_advanced", "Show Advanced Options", value = FALSE),
       conditionalPanel(
         condition = "input.show_advanced == true",
+
         numericInput("seed", "Set a test/training split seed", value = 19120415),
-        sliderInput("threshold", "Choose Classification Threshold",
+        sliderInput("threshold", "Select Classification Threshold",
                     min = 0, max = 1, value = 0.50)
+      ),
+      shinyBS::bsTooltip("seed",
+                         "This seed changes the randomisation of rows assigned to test and training datasets.",
+                         "right",
+                         options = list(container = "body")
+      ),
+      shinyBS::bsTooltip("threshold",
+                         "This value sets the probability cutoff for classifying survival. Predictions above this value are labeled as survived.",
+                         "right",
+                         options = list(container = "body")
       )
     ),
 
@@ -45,19 +56,31 @@ titanic_ui <- function() {
         tabPanel("Prediction",
                  verbatimTextOutput("pred")),
         tabPanel("Survival Patterns",
-                 plotOutput("survival_plot"),
-                 selectInput("metric", "Choose Plot Metric:",
-                              choices = c("Passenger Class" = "Pclass",
-                                          "Sex",
-                                          "Cabin Deck" = "Cabin",
-                                          "Port of Embarkation" = "Embarked",
-                                          "Age",
-                                          "Fare",
-                                          "Number of Siblings/Spouses Aboard" = "SibSp",
-                                          "Number of Parents/Children Aboard" = "Parch"))
+                 shinyBS::bsCollapse(id = "collapse_survival",
+                                     shinyBS::bsCollapsePanel(
+                                       "Survival by Feature (Not Affected by Advanced Options)",
+                                       plotOutput("survival_plot"),
+                                       selectInput("metric", "Choose Plot Metric:",
+                                       choices = c("Passenger Class" = "Pclass",
+                                                   "Sex",
+                                                   "Cabin Deck" = "Cabin",
+                                                   "Port of Embarkation" = "Embarked",
+                                                   "Age",
+                                                   "Fare",
+                                                   "Number of Siblings/Spouses Aboard" = "SibSp",
+                                                   "Number of Parents/Children Aboard" = "Parch"))
+                                     )
                  ),
+                 shinyBS::bsCollapse(id = "collapse_probability",
+                                     shinyBS::bsCollapsePanel(
+                                       "Predicted Probability Distribution For Model",
+                                       plotOutput("probability_plot")
+                                     )
+                 )
+        ),
         tabPanel("Confusion Matrix",
-                 verbatimTextOutput("confus")),
+                 verbatimTextOutput("confus")
+                 ),
         tabPanel("ROC-AUC",
                  plotOutput("roc_auc_graph", width = "400px", height = "400px"),
                  verbatimTextOutput("roc_auc_value")

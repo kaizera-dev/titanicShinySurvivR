@@ -22,6 +22,8 @@ preprocess_titanic_data <- function(train_data, test_data) {
   train_data$Fare <- as.numeric(train_data$Fare)
   train_data$Age <- as.numeric(train_data$Age)
 
+  train_age_median <- median(train_data$Age, na.rm = TRUE)
+
   general_recipe <- recipes::recipe(Survived ~ ., data = train_data) %>%
     recipes::step_impute_median(SibSp, Parch) %>%
     recipes::step_impute_linear(Fare) %>%
@@ -36,6 +38,9 @@ preprocess_titanic_data <- function(train_data, test_data) {
   prepped_recipe <- suppressWarnings(recipes::prep(general_recipe, training = train_data))
   train_prepped <- suppressWarnings(recipes::bake(prepped_recipe, new_data = train_data))
   test_prepped <- suppressWarnings(recipes::bake(prepped_recipe, new_data = test_data))
+
+  train_prepped$Age[is.na(train_prepped$Age)] <- train_age_median
+  test_prepped$Age[is.na(test_prepped$Age)] <- train_age_median
 
   return(list(train = train_prepped,
               test = test_prepped,

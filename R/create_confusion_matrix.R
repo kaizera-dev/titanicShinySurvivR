@@ -9,7 +9,9 @@
 #'
 #' @keywords internal
 #' @noRd
-create_confusion_matrix <- function(testing_data, model_list, class_threshold) {
+create_confusion_matrix <- function(testing_data,
+                                    model_list,
+                                    class_threshold) {
 
   if (!is.data.frame(testing_data)) {
     stop("`testing_data` must be a data frame.")
@@ -35,8 +37,10 @@ create_confusion_matrix <- function(testing_data, model_list, class_threshold) {
       1, 0
     )
   } else if (inherits(model, "rpart")) {
-    predicted <- predict(model, newdata = testing_data, type = "class")
-  } else if (inherits(model, "randomForest")) {
+    predicted <- ifelse(
+      predict(model, newdata = testing_data, type = "prob")[, "1"] > class_threshold,
+      1, 0
+    )  } else if (inherits(model, "randomForest")) {
     predicted <- ifelse(
       predict(model, newdata = testing_data, type = "prob")[, "1"] > class_threshold,
       1, 0

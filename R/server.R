@@ -118,7 +118,14 @@ titanic_server <- function(input, output, session) {
 
   output$confus <- renderText({
 
-    titanicShinySurvivR:::generate_confusion_matrix_summary(conf_mx())
+    paste(
+      "NOTE:\n",
+      "In this tab, the survival outcome is coded as:\n",
+      "  1 = SURVIVED\n",
+      "  0 = DID NOT SURVIVE\n\n",
+    titanicShinySurvivR:::generate_confusion_matrix_summary(conf_mx()),
+    collapse = ""
+    )
   })
 
   user_data <- reactive({
@@ -154,7 +161,15 @@ req(model_list(), input$model, prepped_user_data(), input$threshold)
   })
 
   output$survival_plot <- renderPlot({
-    titanicShinySurvivR:::plot_survival_metric(reactive_titanic(), input$metric)
+    titanicShinySurvivR:::plot_survival_metric(reactive_titanic(),
+                                               input$metric)
+  })
+
+  output$probability_plot <- renderPlot({
+    titanicShinySurvivR:::plot_predicted_probabilites(prepped_test_data = prepped_test(),
+                                                      model_list = model_list(),
+                                                      chosen_model = input$model,
+                                                      class_threshold = input$threshold)
   })
 
   roc_auc_output <- reactive({
@@ -168,7 +183,9 @@ req(model_list(), input$model, prepped_user_data(), input$threshold)
   })
 
   output$roc_auc_value <- renderText({
-    paste0("AUC:", roc_auc_output()$value)
+    paste0("AUC: ", roc_auc_output()$value, "\n\n",
+           input$model, " ranks positives above negatives ",
+           round(roc_auc_output()$value*100,2),"% of the time.")
   })
 
   output$intro <- renderUI({

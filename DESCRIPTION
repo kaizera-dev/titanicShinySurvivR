@@ -1,6 +1,6 @@
 Package: titanicShinySurvivR
 Title: Interactive Titanic Survival Prediction App and ML Pipeline
-Version: 0.1.0
+Version: 1.0.0
 Authors@R: 
     person("Alphonse", "Kwizera", email = "kaizera.dev@outlook.com", role = c("aut", "cre"))
 Description: Provides an interactive Shiny application and supporting functions 
@@ -15,6 +15,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports:
     shiny,
+    shinyBS,
     dplyr,
     ggplot2,
     recipes,
