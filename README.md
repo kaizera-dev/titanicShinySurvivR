@@ -1,49 +1,57 @@
-# 🚢 titanicShinySurvivR
+# 🚢 Titanic SurvivR
 
-`titanicShinySurvivR` is a package that is the backend for the `Titanic SurvivR` Shiny app, an app that is based on the classic Kaggle Titanic dataset, and allows the user to select a machine learning model and predict survival based on user-selected inputs. 
-The package itself handles preprocessing, modelling, and evaluation in an organised pipeline.
+`titanicShinySurvivR` is the backend package for the **Titanic SurvivR** Shiny app—an interactive tool that lets users explore and predict Titanic survival outcomes using various machine learning models.
 
-This project was built during my placement year as a statistical programmer in the pharmaceutical industry to **deepen my understanding of applied machine learning, statistics, structured app development, and data workflows.**
+This project was created during my placement year as a **statistical programmer in the pharmaceutical industry** to deepen my understanding of applied machine learning, statistics, structured app development, and reproducible workflows.
 
 ---
 
 ## 🎯 Purpose
 
-The aim of this project wasn`t just about building a Titanic app—it was to simulate the core components of a typical machine learning workflow, with an emphasis on structure and clarity:
+This wasn’t just about building a Titanic app—it was about simulating a realistic machine learning pipeline, with a focus on:
 
-- Clean data preprocessing and feature engineering  
-- Easy comparison of models through a UI-driven interface  
-- Encapsulating logic in modular functions to improve clarity and maintainability within the app
+- Clean preprocessing and thoughtful feature engineering  
+- Hands-on model selection and evaluation  
+- User-friendly design with technical depth under the hood  
+
 ---
 
 ## ⚙️ App Features
 
-- Choose from multiple classification models:
-  - Logistic Regression  
-  - Decision Tree  
-  - Random Forest  
-- Model selection interface with dynamic prediction results
-- Visualisations of accuracy and confusion matrix
-- Built-in preprocessing and feature engineering using the `{titanicShinySurvivR}` package  
-- Optional file upload: test the models on your own Titanic-format data  
+- Upload the classic Kaggle Titanic dataset—or your own compatible data  
+- Choose from multiple ML models:
+  - **Logistic Regression** (with stepwise selection)
+  - **Decision Tree** (with pruning)
+  - **Random Forest** (tuned for tree count and depth)  
+- Control train/test split via random seed
+- Adjust classification threshold and instantly see its effect  
+- Visualisations for model performance:  
+  - Accuracy, Precision, Recall, F1 Score, Confusion Matrix, ROC-AUC  
+- Feature importance output: see which variables drive predictions  
+- Clean UI with collapsing panels, intuitive layout, and clear guidance  
+- Extensive error handling and input validation throughout  
 
 ---
 
-## 📦 Skills Demonstrated
+## 💻 Try the App
 
-- Shiny app structured with clear separation between UI, server logic, and machine learning components—e.g., data validation, preprocessing, modeling, and output generation.
-- R package development with `{usethis}` and `{devtools}`  
-- Applied ML using `{recipes}`, `{rpart}`, and `{randomForest}`  
-- Practicing modular design and documenting custom functions tailored to the Titanic dataset
+▶️ [**Launch Titanic SurvivR (hosted on shinyapps.io)**](https://kaizera-dev.shinyapps.io/titanicshinysurvivr-app/)
 
 ---
 
-## 🚀 How to Run
+## 📦 Skills Developed
 
-### Option 1: From RStudio
+- Full Shiny app architecture: clear separation of concerns (UI/server/helpers)  
+- R package development with `{usethis}`, `{devtools}`, and internal documentation using roxygen2  
+- ML pipeline construction with `{recipes}`, `{rpart}`, and `{randomForest}`  
+- Debugging and reactive logic troubleshooting in dynamic environments  
+- UX thinking: simplified layout based on tester feedback  
+
+---
+
+## 🚀 How to Run Locally
 
 ```r
 # install.packages("devtools")
 devtools::install_github("kaizera-dev/titanicShinySurvivR")
-titanicShinySurvivR::launch_app()
-
+titanicShinySurvivR::launch_titanic_survivr_app()
