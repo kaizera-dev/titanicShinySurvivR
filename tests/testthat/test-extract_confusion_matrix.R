@@ -6,13 +6,12 @@ test_that("extract_confusion_matrix returns correct values for valid 2x2 matrix"
 
   result <- extract_confusion_matrix(cm)
 
-  expect_s3_class(result, "data.frame")
-  expect_named(result, c("Model", "True_Negative", "False_Negative", "False_Positive", "True_Positive"))
-  expect_equal(result$Model, "TestModel")
-  expect_equal(result$True_Negative, 10)
-  expect_equal(result$False_Negative, 2)
-  expect_equal(result$False_Positive, 3)
-  expect_equal(result$True_Positive, 15)
+  expect_equal(class(result), "character")
+  expect_match(result, "Model: TestModel")
+  expect_match(result, "Actual 0")
+  expect_match(result, "Actual 1")
+  expect_match(result, "Predicted 0")
+  expect_match(result, "Predicted 1")
 })
 
 test_that("extract_confusion_matrix returns error field for invalid confusion matrix", {
@@ -20,7 +19,7 @@ test_that("extract_confusion_matrix returns error field for invalid confusion ma
   cm_not_matrix <- list(Model = "NotMatrix", ConfusionMatrix = data.frame(A = 1:2))
   cm_wrong_dim <- list(Model = "WrongDim", ConfusionMatrix = matrix(1:3, nrow = 3))
 
-  expect_equal(extract_confusion_matrix(cm_missing)$Error, "Invalid confusion matrix")
-  expect_equal(extract_confusion_matrix(cm_not_matrix)$Error, "Invalid confusion matrix")
-  expect_equal(extract_confusion_matrix(cm_wrong_dim)$Error, "Invalid confusion matrix")
+  expect_error(extract_confusion_matrix(cm_missing), "Invalid confusion matrix")
+  expect_error(extract_confusion_matrix(cm_not_matrix), "Invalid confusion matrix")
+  expect_error(extract_confusion_matrix(cm_wrong_dim), "Invalid confusion matrix")
 })

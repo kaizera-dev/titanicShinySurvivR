@@ -6,9 +6,9 @@ test_that("generate_confusion_matrix_summary aggregates multiple valid results",
 
   result <- generate_confusion_matrix_summary(input)
 
-  expect_s3_class(result, "data.frame")
-  expect_equal(nrow(result), 2)
-  expect_equal(result$Model, c("M1", "M2"))
+  expect_equal(length(result), 1)
+  expect_match(result, "Model: M1", fixed = TRUE)
+  expect_match(result, "Model: M2", fixed = TRUE)
 })
 
 test_that("generate_confusion_matrix_summary handles invalid inputs", {

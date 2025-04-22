@@ -27,7 +27,7 @@ generate_confusion_matrix_summary <- function(conf_mx_list) {
 #' @noRd
 extract_confusion_matrix <- function(cm) {
   if (!"ConfusionMatrix" %in% names(cm) || !is.matrix(cm$ConfusionMatrix) || dim(cm$ConfusionMatrix)[1] != 2) {
-    return(paste("Model:", cm$Model, "- Invalid confusion matrix"))
+    return(stop(paste("Model:", cm$Model, "- Invalid confusion matrix")))
   }
 
   mat <- cm$ConfusionMatrix

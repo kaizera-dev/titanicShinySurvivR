@@ -23,10 +23,10 @@ preprocess_titanic_data <- function(train_data, test_data) {
   train_data$Age <- as.numeric(train_data$Age)
 
   train_age_median <- median(train_data$Age, na.rm = TRUE)
+  train_fare_median <- median(train_data$Fare, na.rm = TRUE)
 
   general_recipe <- recipes::recipe(Survived ~ ., data = train_data) %>%
     recipes::step_impute_median(SibSp, Parch) %>%
-    recipes::step_impute_linear(Fare) %>%
     recipes::step_impute_mode(Embarked, Pclass) %>%
     recipes::step_mutate(HaveCabin = as.factor(ifelse(is.na(Cabin), 0, 1))) %>%
     recipes::step_mutate(CabinDeck = dplyr::if_else(is.na(Cabin), "U", substr(Cabin, 1, 1))) %>%
@@ -41,6 +41,8 @@ preprocess_titanic_data <- function(train_data, test_data) {
 
   train_prepped$Age[is.na(train_prepped$Age)] <- train_age_median
   test_prepped$Age[is.na(test_prepped$Age)] <- train_age_median
+  train_prepped$Fare[is.na(train_prepped$Fare)] <- train_fare_median
+  test_prepped$Fare[is.na(test_prepped$Fare)] <- train_fare_median
 
   return(list(train = train_prepped,
               test = test_prepped,

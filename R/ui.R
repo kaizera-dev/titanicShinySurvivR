@@ -2,7 +2,7 @@
 titanic_ui <- function() {
 
   fluidPage(
-  titlePanel("Titanic SurvivR (Beta)"),
+  titlePanel("Titanic SurvivR"),
   sidebarLayout(
     sidebarPanel(
       fileInput("upload", "Upload Dataset (.csv Only)", accept = ".csv"),
@@ -51,46 +51,58 @@ titanic_ui <- function() {
 
     mainPanel(
       tabsetPanel(
-        tabPanel("Introduction",
-                 uiOutput("intro")),
-        tabPanel("Prediction",
-                 verbatimTextOutput("pred")),
-        tabPanel("Survival Patterns",
-                 shinyBS::bsCollapse(id = "collapse_survival",
-                                     shinyBS::bsCollapsePanel(
-                                       "Survival by Feature (Not Affected by Advanced Options)",
-                                       plotOutput("survival_plot"),
-                                       selectInput("metric", "Choose Plot Metric:",
-                                       choices = c("Passenger Class" = "Pclass",
-                                                   "Sex",
-                                                   "Cabin Deck" = "Cabin",
-                                                   "Port of Embarkation" = "Embarked",
-                                                   "Age",
-                                                   "Fare",
-                                                   "Number of Siblings/Spouses Aboard" = "SibSp",
-                                                   "Number of Parents/Children Aboard" = "Parch"))
-                                     )
-                 ),
-                 shinyBS::bsCollapse(id = "collapse_probability",
-                                     shinyBS::bsCollapsePanel(
-                                       "Predicted Probability Distribution For Model",
-                                       plotOutput("probability_plot")
-                                     )
-                 )
+        tabPanel(
+          title = tagList(icon("info-circle"), "Introduction"),
+          uiOutput("intro")
         ),
-        tabPanel("Confusion Matrix",
-                 verbatimTextOutput("confus")
-                 ),
-        tabPanel("ROC-AUC",
-                 plotOutput("roc_auc_graph", width = "400px", height = "400px"),
-                 verbatimTextOutput("roc_auc_value")
-                 ),
-        tabPanel("Data Preview",
-                 tableOutput("data_preview")),
-        tabPanel("Titanic Deck Layout",
-                 imageOutput("DeckImage"))
+        tabPanel(
+          title = tagList(icon("magic"), "Prediction"),
+          verbatimTextOutput("pred")
+        ),
+        tabPanel(
+          title = tagList(icon("chart-bar"), "Survival Patterns"),
+          shinyBS::bsCollapse(id = "collapse_survival",
+                              shinyBS::bsCollapsePanel(
+                                "Survival by Feature (Not Affected by Advanced Options)",
+                                plotOutput("survival_plot"),
+                                selectInput("metric", "Choose Plot Metric:",
+                                            choices = c("Passenger Class" = "Pclass",
+                                                        "Sex",
+                                                        "Cabin Deck" = "Cabin",
+                                                        "Port of Embarkation" = "Embarked",
+                                                        "Age",
+                                                        "Fare",
+                                                        "Number of Siblings/Spouses Aboard" = "SibSp",
+                                                        "Number of Parents/Children Aboard" = "Parch"))
+                              )
+          ),
+          shinyBS::bsCollapse(id = "collapse_probability",
+                              shinyBS::bsCollapsePanel(
+                                "Predicted Probability Distribution For Model",
+                                plotOutput("probability_plot")
+                              )
+          )
+        ),
+        tabPanel(
+          title = tagList(icon("table"), "Confusion Matrix"),
+          verbatimTextOutput("confus")
+        ),
+        tabPanel(
+          title = tagList(icon("chart-line"), "ROC-AUC"),
+          plotOutput("roc_auc_graph", width = "400px", height = "400px"),
+          verbatimTextOutput("roc_auc_value")
+        ),
+        tabPanel(
+          title = tagList(icon("database"), "Data Preview"),
+          tableOutput("data_preview")
+        ),
+        tabPanel(
+          title = tagList(icon("ship"), "Titanic Deck Layout"),
+          imageOutput("DeckImage")
+        )
       )
     )
+
   )
 )
 }

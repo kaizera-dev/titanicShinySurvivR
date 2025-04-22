@@ -152,12 +152,20 @@ titanic_server <- function(input, output, session) {
   })
 
   output$pred <- renderText({
-req(model_list(), input$model, prepped_user_data(), input$threshold)
 
+    model_obj <- switch(input$model,
+                        "Logistic Regression" = LR(),
+                        "Decision Tree" = dec_tree(),
+                        "Random Forest" = rand_forest())
+    paste(
     titanicShinySurvivR:::predict_user_outcome(model_list = model_list(),
                          selected_model = input$model,
                          user_data = prepped_user_data(),
-                         threshold = input$threshold)
+                         threshold = input$threshold),
+    "\n\nThe most important features for the", input$model,"model are:",
+    titanicShinySurvivR:::extract_important_features(model_obj, input$model),
+    "\n"
+    )
   })
 
   output$survival_plot <- renderPlot({
