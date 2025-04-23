@@ -57,7 +57,22 @@ titanic_ui <- function() {
         shiny::tabsetPanel(
           shiny::tabPanel(
             title = shiny::tagList(shiny::icon("info-circle"), "Introduction"),
-              shiny::uiOutput("intro")
+            shiny::fluidRow(
+              shiny::column(
+                width = 8,
+                shiny::uiOutput("intro")
+              ),
+              shiny::column(
+                width = 4,
+                shiny::tags$div(
+                  shiny::img(
+                    src = "www/TTSR_logo.jpg",
+                    height = "250px",
+                    style = "display: block; margin: 0 auto;"
+                  )
+                )
+              )
+            )
           ),
           shiny::tabPanel(
             title = shiny::tagList(shiny::icon("magic"), "Prediction"),
@@ -102,7 +117,7 @@ titanic_ui <- function() {
           ),
           shiny::tabPanel(
             title = shiny::tagList(shiny::icon("ship"), "Titanic Deck Layout"),
-            shiny::imageOutput("DeckImage")
+            shiny::img(src = "www/titanic_layout.png", height = "800px", width = "525px")
           )
         )
       )
