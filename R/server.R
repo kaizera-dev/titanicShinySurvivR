@@ -205,7 +205,7 @@ titanic_server <- function(input, output, session) {
 
   output$DeckImage <- shiny::renderImage({
 
-    list(src = "www/titanic_layout.jpg",
+    list(src = "titanic_layout.jpg",
          contentType = 'image/jpeg',
          width = 525,
          height = 800,
