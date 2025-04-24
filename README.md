@@ -25,10 +25,9 @@ This wasn’t just about building a Titanic app—it was about simulating a real
   - **Random Forest** (tuned for tree count and depth)  
 - Control train/test split via random seed
 - Adjust classification threshold and instantly see its effect  
-- Visualisations for model performance:  
+- Metrics for model performance:  
   - Accuracy, Precision, Recall, F1 Score, Confusion Matrix, ROC-AUC  
 - Feature importance output: see which variables drive predictions  
-- Clean UI with collapsing panels, intuitive layout, and clear guidance  
 - Extensive error handling and input validation throughout  
 
 ---

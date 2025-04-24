@@ -113,6 +113,7 @@ titanic_ui <- function() {
           ),
           shiny::tabPanel(
             title = shiny::tagList(shiny::icon("database"), "Data Preview"),
+            shiny::verbatimTextOutput("preview_note"),
             shiny::tableOutput("data_preview")
           ),
           shiny::tabPanel(

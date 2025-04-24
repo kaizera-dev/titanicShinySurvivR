@@ -35,6 +35,11 @@ titanic_server <- function(input, output, session) {
     utils::head(reactive_titanic(), n = 15)
   })
 
+  output$preview_note <- shiny::renderText({
+    "Note: Some names were changed in the Kaggle dataset to thank those who inspired or supported this project.
+These edits do not affect prediction results."
+  })
+
   train_test_split <- shiny::reactive({
     shiny::req(reactive_titanic())
     set.seed(input$seed)
@@ -188,7 +193,7 @@ titanic_server <- function(input, output, session) {
 <ul>
   <li><strong>Introduction:</strong> Overview of the app's purpose and how to use it.</li>
   <li><strong>Prediction:</strong> View your survival outcome based on selected input features and see which features matter the most.</li>
-  <li><strong>Survival Patterns:</strong> Visualize how specific features relate to survival rates.</li>
+  <li><strong>Survival Patterns:</strong> Visualise how specific features relate to survival rates, and view the predicted probability distribution for each model.</li>
   <li><strong>Confusion Matrix:</strong> See how well each model classifies survival outcomes on test data.</li>
   <li><strong>ROC-AUC:</strong> Evaluate model discrimination using ROC curves and AUC values.</li>
   <li><strong>Data Preview:</strong> Examine the raw dataset used for model training and testing.</li>
