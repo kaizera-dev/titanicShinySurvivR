@@ -59,4 +59,3 @@ test_that("error for unsupported model", {
     "Unsupported model type. Use 'Logistic Regression', 'Decision Tree', or 'Random Forest'."
   )
 })
-

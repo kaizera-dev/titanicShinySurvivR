@@ -26,7 +26,6 @@ test <- data.frame(
 test$Survived <- as.factor(test$Survived)
 
 test_that("plot_roc_auc handles glm, rpart, and randomForest", {
-
   set.seed(19120415)
 
   glm_model <- glm(Survived ~ ., data = train, family = "binomial")

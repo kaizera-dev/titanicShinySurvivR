@@ -13,7 +13,8 @@ generate_confusion_matrix_summary <- function(conf_mx_list) {
   }
 
   paste(lapply(conf_mx_list, extract_confusion_matrix),
-        collapse = "\n\n")
+    collapse = "\n\n"
+  )
 }
 
 #' Extract Confusion Matrix Values
@@ -37,12 +38,11 @@ extract_confusion_matrix <- function(cm) {
     "Model: ", cm$Model, "\n",
     "Confusion Matrix:\n",
     "            Predicted 0   Predicted 1\n",
-    sprintf("Actual 0:      %3d          %3d\n", mat[1,1], mat[1,2]),
-    sprintf("Actual 1:      %3d          %3d\n", mat[2,1], mat[2,2]),
+    sprintf("Actual 0:      %3d          %3d\n", mat[1, 1], mat[1, 2]),
+    sprintf("Actual 1:      %3d          %3d\n", mat[2, 1], mat[2, 2]),
     sprintf("Accuracy: %.3f%%\n", cm$Accuracy),
     sprintf("Precision: %.3f%%\n", cm$Precision),
     sprintf("Recall: %.3f%%\n", cm$Recall),
     sprintf("F1 Score: %.3f%%\n", f1)
   )
-
 }

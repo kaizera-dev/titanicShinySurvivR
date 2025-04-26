@@ -29,8 +29,9 @@ plot_roc_auc <- function(testing_data,
   roc_obj <- pROC::roc(actual, predicted_prob)
 
   list(
-  graph = plot(roc_obj,
-       main = paste0("ROC-AUC for the ", selected_model, " model")),
-       value = pROC::auc(roc_obj)
+    graph = plot(roc_obj,
+      main = paste0("ROC-AUC for the ", selected_model, " model")
+    ),
+    value = pROC::auc(roc_obj)
   )
 }

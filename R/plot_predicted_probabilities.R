@@ -16,12 +16,11 @@ plot_predicted_probabilites <- function(prepped_test_data,
                                         model_list,
                                         chosen_model,
                                         class_threshold) {
-
   if (!is.list(model_list) || !chosen_model %in% names(model_list)) {
     stop(paste(chosen_model, "not found in model list."))
   }
 
-  actual_class <- ifelse(prepped_test_data$Survived == 1, "Yes", "No" )
+  actual_class <- ifelse(prepped_test_data$Survived == 1, "Yes", "No")
 
   model <- model_list[[chosen_model]]
   model_class <- class(model)[1]
@@ -55,6 +54,6 @@ plot_predicted_probabilites <- function(prepped_test_data,
       x = "Predicted Probability",
       fill = "Survived?",
       title = paste0("Probability Density Plot for ", chosen_model, " Model")
-    ) + ggplot2::theme_minimal()
-
-  }
+    ) +
+    ggplot2::theme_minimal()
+}

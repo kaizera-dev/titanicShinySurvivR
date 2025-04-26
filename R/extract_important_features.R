@@ -43,21 +43,21 @@ extract_important_features <- function(model_object, model_name) {
   }
 
   important_features <- switch(model_name,
-                               "Logistic Regression" = {
-                                 coefs <- coef(model_object)
-                                 if (is.null(coefs)) stop("Could not extract coefficients from logistic regression model.")
-                                 names(coefs)[-1]
-                               },
-                               "Decision Tree" = {
-                                 if (is.null(model_object$variable.importance)) stop("No variable importance found in decision tree.")
-                                 names(model_object$variable.importance)
-                               },
-                               "Random Forest" = {
-                                 importance <- randomForest::importance(model_object)
-                                 if (is.null(importance)) stop("Could not extract importance from random forest.")
-                                 rownames(importance)
-                               },
-                               stop("Unsupported model type. Use 'Logistic Regression', 'Decision Tree', or 'Random Forest'.")
+    "Logistic Regression" = {
+      coefs <- coef(model_object)
+      if (is.null(coefs)) stop("Could not extract coefficients from logistic regression model.")
+      names(coefs)[-1]
+    },
+    "Decision Tree" = {
+      if (is.null(model_object$variable.importance)) stop("No variable importance found in decision tree.")
+      names(model_object$variable.importance)
+    },
+    "Random Forest" = {
+      importance <- randomForest::importance(model_object)
+      if (is.null(importance)) stop("Could not extract importance from random forest.")
+      rownames(importance)
+    },
+    stop("Unsupported model type. Use 'Logistic Regression', 'Decision Tree', or 'Random Forest'.")
   )
 
   renamed_features <- sapply(important_features, rename_important_features)

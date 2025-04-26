@@ -4,7 +4,7 @@
 #' @export
 launch_titanic_survivr_app <- function() {
   shiny::shinyApp(
-    ui = titanicShinySurvivR:::titanic_ui(),
-    server = titanicShinySurvivR:::titanic_server
+    ui = titanic_ui(),
+    server = titanic_server
   )
 }

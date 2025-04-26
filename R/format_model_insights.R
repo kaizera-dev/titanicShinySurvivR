@@ -8,7 +8,6 @@
 #' @keywords internal
 #' @noRd
 format_model_insights <- function(conf_mx_list) {
-
   if (!is.list(conf_mx_list) || inherits(conf_mx_list, "data.frame")) {
     stop("`conf_mx_list` must be a plain list, not a data frame. Got: ", class(conf_mx_list)[1])
   }
@@ -18,8 +17,10 @@ format_model_insights <- function(conf_mx_list) {
   for (cm in conf_mx_list) {
     missing_fields <- setdiff(required_fields, names(cm))
     if (length(missing_fields) > 0) {
-      stop("One or more confusion matrix entries are missing required fields: ",
-           paste(missing_fields, collapse = ", "))
+      stop(
+        "One or more confusion matrix entries are missing required fields: ",
+        paste(missing_fields, collapse = ", ")
+      )
     }
 
     if (!is.character(cm$Model)) {
@@ -41,7 +42,6 @@ format_model_insights <- function(conf_mx_list) {
 #' @keywords internal
 #' @noRd
 extract_model_insights <- function(cm) {
-
   if (!is.numeric(cm$Accuracy) || !is.numeric(cm$Precision) || !is.numeric(cm$Recall)) {
     stop("Accuracy, Precision, and Recall must all be numeric.")
   }
@@ -60,4 +60,3 @@ extract_model_insights <- function(cm) {
     "\nF1 Score: ", round(f1_score, 3), "%\n"
   )
 }
-

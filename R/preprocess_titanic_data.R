@@ -9,7 +9,6 @@
 #' @keywords internal
 #' @noRd
 preprocess_titanic_data <- function(train_data, test_data) {
-
   required_cols <- c("Survived", "Pclass", "Sex", "Age", "SibSp", "Parch", "Fare", "Embarked", "Cabin")
 
   train_data <- train_data[required_cols]
@@ -30,7 +29,7 @@ preprocess_titanic_data <- function(train_data, test_data) {
     recipes::step_impute_mode(Embarked, Pclass) %>%
     recipes::step_mutate(HaveCabin = as.factor(ifelse(is.na(Cabin), 0, 1))) %>%
     recipes::step_mutate(CabinDeck = dplyr::if_else(is.na(Cabin), "U", substr(Cabin, 1, 1))) %>%
-    recipes::step_mutate(CabinDeck = factor(CabinDeck))  %>%
+    recipes::step_mutate(CabinDeck = factor(CabinDeck)) %>%
     recipes::step_mutate(FamilySize = SibSp + Parch + 1) %>%
     recipes::step_mutate(IsAlone = dplyr::if_else(FamilySize == 1, 1, 0)) %>%
     recipes::step_rm(Cabin)
@@ -44,7 +43,9 @@ preprocess_titanic_data <- function(train_data, test_data) {
   train_prepped$Fare[is.na(train_prepped$Fare)] <- train_fare_median
   test_prepped$Fare[is.na(test_prepped$Fare)] <- train_fare_median
 
-  return(list(train = train_prepped,
-              test = test_prepped,
-              recipe = prepped_recipe))
+  return(list(
+    train = train_prepped,
+    test = test_prepped,
+    recipe = prepped_recipe
+  ))
 }

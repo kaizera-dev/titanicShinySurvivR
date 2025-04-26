@@ -9,7 +9,6 @@
 #' @keywords internal
 #' @noRd
 plot_survival_metric <- function(df, metric) {
-
   if (!"Survived" %in% names(df)) {
     stop("The input data frame must include a 'Survived' column.")
   }
@@ -29,19 +28,14 @@ plot_survival_metric <- function(df, metric) {
   density_plot_metrics <- c("Age", "Fare", "SibSp", "Parch")
 
   if (metric %in% density_plot_metrics) {
-
-  ggplot2::ggplot(df, ggplot2::aes(x = .data[[metric]], fill = factor(Survived))) +
+    ggplot2::ggplot(df, ggplot2::aes(x = .data[[metric]], fill = factor(Survived))) +
       ggplot2::geom_density(alpha = 0.7) +
       ggplot2::scale_color_manual(values = c("red", "cyan")) +
       ggplot2::theme_minimal()
-
   } else {
-
     ggplot2::ggplot(df, ggplot2::aes(x = factor(.data[[metric]]), fill = Survived)) +
       ggplot2::geom_bar(position = "dodge") +
       ggplot2::labs(x = "Metric", y = "Count", fill = "Survived?") +
       ggplot2::theme_minimal()
-
   }
-
 }

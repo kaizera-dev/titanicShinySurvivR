@@ -1,4 +1,3 @@
-
 valid_df <- data.frame(
   Survived = c(1, 0),
   Pclass = c(1, 2),
@@ -38,8 +37,10 @@ test_that("validate_titanic_data returns error if any required column is all NA"
     Embarked = c("S", "C"),
     Cabin = NA
   )
-  expect_equal(validate_titanic_data(df),
-               "The following required columns contain only NA values in `df`: Cabin")
+  expect_equal(
+    validate_titanic_data(df),
+    "The following required columns contain only NA values in `df`: Cabin"
+  )
 })
 
 test_that("validate_titanic_data catches invalid Survived values", {
@@ -93,4 +94,3 @@ test_that("validate_titanic_data returns NULL for valid data", {
   )
   expect_null(validate_titanic_data(df))
 })
-

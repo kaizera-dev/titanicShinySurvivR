@@ -59,4 +59,3 @@ test_that("Pclass, Sex, Embarked, and CabinDeck are factors", {
   expect_s3_class(result$Embarked, "factor")
   expect_s3_class(result$CabinDeck, "factor")
 })
-

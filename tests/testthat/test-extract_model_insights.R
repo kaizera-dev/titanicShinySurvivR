@@ -50,4 +50,3 @@ test_that("extract_model_insights throws error when Precision + Recall is zero",
 
   expect_error(extract_model_insights(cm), "F1 score cannot be computed")
 })
-

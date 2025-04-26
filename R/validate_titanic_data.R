@@ -8,7 +8,6 @@
 #' @keywords internal
 #' @noRd
 validate_titanic_data <- function(df) {
-
   if (nrow(df) == 0) {
     return("Please use a dataset that is not empty.")
   }
@@ -21,15 +20,19 @@ validate_titanic_data <- function(df) {
 
   missing_cols <- setdiff(required_cols, names(df))
   if (length(missing_cols) > 0) {
-    return(paste("Error: The dataset is missing the following required columns:",
-                 paste(missing_cols, collapse = ", ")))
+    return(paste(
+      "Error: The dataset is missing the following required columns:",
+      paste(missing_cols, collapse = ", ")
+    ))
   }
 
   all_na_cols <- sapply(df[required_cols], function(x) all(is.na(x)))
   if (any(all_na_cols)) {
     return(
-      paste("The following required columns contain only NA values in `df`:",
-            paste(names(all_na_cols[all_na_cols]), collapse = ", "))
+      paste(
+        "The following required columns contain only NA values in `df`:",
+        paste(names(all_na_cols[all_na_cols]), collapse = ", ")
+      )
     )
   }
 
