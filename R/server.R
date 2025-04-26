@@ -1,9 +1,25 @@
 titanic_server <- function(input, output, session) {
-
   shiny::reactiveVal("") -> current_data
 
   shiny::observeEvent(input$default, {
     current_data("default")
+    shiny::showModal(
+      shiny::modalDialog(
+        title = "Loaded Titanic Dataset",
+        easyClose = TRUE,
+        footer = NULL,
+        size = "s",
+        "The Kaggle Titanic dataset has been loaded.",
+        shiny::tags$br(),
+        shiny::tags$button(
+          "Close",
+          type = "button",
+          class = "btn btn-primary",
+          `data-bs-dismiss` = "modal",
+          `aria-label` = "Close"
+        )
+      )
+    )
   })
 
   shiny::observeEvent(input$upload, {
@@ -11,6 +27,13 @@ titanic_server <- function(input, output, session) {
   })
 
   reactive_titanic <- shiny::reactive({
+    shiny::validate(
+      shiny::need(
+        current_data(),
+        "Please select a dataset to use for analysis."
+      )
+    )
+
     shiny::req(current_data())
 
     if (current_data() == "default") {
@@ -43,41 +66,68 @@ These edits do not affect prediction results."
   train_test_split <- shiny::reactive({
     shiny::req(reactive_titanic())
     set.seed(input$seed)
-    titanic_split <- rsample::initial_split(reactive_titanic(), prop = 0.7, strata = Survived)
+    titanic_split <- rsample::initial_split(
+      reactive_titanic(),
+      prop = 0.7,
+      strata = Survived
+    )
     train_data <- rsample::training(titanic_split)
     test_data <- rsample::testing(titanic_split)
     list(train = train_data, test = test_data)
   })
 
-  raw_train <- shiny::reactive({ train_test_split()$train })
-  raw_test <- shiny::reactive({ train_test_split()$test })
-
-  prepped_data <- shiny::reactive({
-    titanicShinySurvivR:::preprocess_titanic_data(train_data = raw_train(), test_data = raw_test())
+  raw_train <- shiny::reactive({
+    train_test_split()$train
+  })
+  raw_test <- shiny::reactive({
+    train_test_split()$test
   })
 
-  prepped_train <- shiny::reactive({ prepped_data()$train })
-  prepped_test <- shiny::reactive({ prepped_data()$test })
-  prepped_recipe <- shiny::reactive({ prepped_data()$recipe })
+  prepped_data <- shiny::reactive({
+    titanicShinySurvivR:::preprocess_titanic_data(
+      train_data = raw_train(),
+      test_data = raw_test()
+    )
+  })
+
+  prepped_train <- shiny::reactive({
+    prepped_data()$train
+  })
+  prepped_test <- shiny::reactive({
+    prepped_data()$test
+  })
+  prepped_recipe <- shiny::reactive({
+    prepped_data()$recipe
+  })
 
   LR <- shiny::reactive({
     shiny::req(prepped_train())
-    MASS::stepAIC(stats::glm(Survived ~ ., data = prepped_train(), family = "binomial"),
-                  direction = "both", trace = FALSE)
+    MASS::stepAIC(
+      stats::glm(Survived ~ ., data = prepped_train(), family = "binomial"),
+      direction = "both",
+      trace = FALSE
+    )
   })
 
   dec_tree <- shiny::reactive({
     shiny::req(prepped_train())
-    rpart::rpart(Survived ~ ., data = prepped_train(), method = "class",
-                 control = rpart::rpart.control(cp = 0.001))
+    rpart::rpart(
+      Survived ~ .,
+      data = prepped_train(),
+      method = "class",
+      control = rpart::rpart.control(cp = 0.001)
+    )
   })
 
   rand_forest <- shiny::reactive({
     shiny::req(prepped_train())
-    randomForest::randomForest(Survived ~ ., data = prepped_train(),
-                               ntree = 600,
-                               mtry = sqrt(ncol(prepped_train())) + 2,
-                               na.action = stats::na.omit)
+    randomForest::randomForest(
+      Survived ~ .,
+      data = prepped_train(),
+      ntree = 600,
+      mtry = sqrt(ncol(prepped_train())) + 2,
+      na.action = stats::na.omit
+    )
   })
 
   model_list <- shiny::reactive({
@@ -110,15 +160,22 @@ These edits do not affect prediction results."
   })
 
   user_data <- shiny::reactive({
-    shiny::req(input$pclass, input$sex, input$age, input$sibsp, input$parch, input$fare)
+    shiny::req(
+      input$pclass,
+      input$sex,
+      input$age,
+      input$sibsp,
+      input$parch,
+      input$fare
+    )
 
     data.frame(
       Pclass = as.numeric(input$pclass),
-      Sex    = input$sex,
-      Age    = input$age,
-      SibSp  = input$sibsp,
-      Parch  = input$parch,
-      Fare   = input$fare,
+      Sex = input$sex,
+      Age = input$age,
+      SibSp = input$sibsp,
+      Parch = input$parch,
+      Fare = input$fare,
       Embarked = input$embark,
       Cabin = input$cabin_deck
     )
@@ -130,10 +187,12 @@ These edits do not affect prediction results."
   })
 
   output$pred <- shiny::renderText({
-    model_obj <- switch(input$model,
-                        "Logistic Regression" = LR(),
-                        "Decision Tree" = dec_tree(),
-                        "Random Forest" = rand_forest())
+    model_obj <- switch(
+      input$model,
+      "Logistic Regression" = LR(),
+      "Decision Tree" = dec_tree(),
+      "Random Forest" = rand_forest()
+    )
     paste(
       titanicShinySurvivR:::predict_user_outcome(
         model_list = model_list(),
@@ -141,7 +200,9 @@ These edits do not affect prediction results."
         user_data = prepped_user_data(),
         threshold = input$threshold
       ),
-      "\n\nThe most important features for the", input$model, "model are:",
+      "\n\nThe most important features for the",
+      input$model,
+      "model are:",
       titanicShinySurvivR:::extract_important_features(model_obj, input$model),
       "\n"
     )
@@ -161,7 +222,11 @@ These edits do not affect prediction results."
   })
 
   roc_auc_output <- shiny::reactive({
-    titanicShinySurvivR:::plot_roc_auc(prepped_test(), model_list(), input$model)
+    titanicShinySurvivR:::plot_roc_auc(
+      prepped_test(),
+      model_list(),
+      input$model
+    )
   })
 
   output$roc_auc_graph <- shiny::renderPlot({
@@ -169,13 +234,20 @@ These edits do not affect prediction results."
   })
 
   output$roc_auc_value <- shiny::renderText({
-    paste0("AUC: ", roc_auc_output()$value, "\n\n",
-           input$model, " ranks positives above negatives ",
-           round(roc_auc_output()$value * 100, 2), "% of the time.")
+    paste0(
+      "AUC: ",
+      roc_auc_output()$value,
+      "\n\n",
+      input$model,
+      " ranks positives above negatives ",
+      round(roc_auc_output()$value * 100, 2),
+      "% of the time."
+    )
   })
 
   output$intro <- renderUI({
-    HTML("
+    HTML(
+      "
 <h2>Welcome to Titanic SurvivR!</h2>
 <p>Thank you for taking the time to check out my first ever project, <strong>Titanic SurvivR</strong>! This Shiny app is based on the classic Kaggle Titanic competition—with a twist: you get to find out whether <em>you</em> would have survived the sinking.</p>
 
@@ -204,8 +276,7 @@ These edits do not affect prediction results."
 <p>The goal of this project was to explore the <strong>Shiny framework</strong> and get hands-on with applied <strong>machine learning and statistics</strong> in R. It really has helped me learn a lot in both fields. Looking back to when I first started, if you had told me ROC-AUC was a Star Wars character, I would have believed you.</p>
 
 <p>Thanks again for checking this out!</p>
-")
-
+"
+    )
   })
-
- }
+}

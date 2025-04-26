@@ -1,0 +1,11 @@
+{
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.defaultFormatter": null,
+    "r.bracketedPaste": true,
+    "[r]": {
+        "editor.defaultFormatter": "Posit.air-vscode"
+    }
+}
