@@ -12,7 +12,7 @@ titanic_ui <- function() {
     titlePanel(
       shiny::tagList(
         shiny::img(src = "www/TTSR_logo.png", height = "50px", style = "margin-right: 10px;"),
-        "Titanic SurvivR"
+        shiny::tags$title("Titanic SurvivR")
       )
     ),
     shiny::sidebarLayout(
