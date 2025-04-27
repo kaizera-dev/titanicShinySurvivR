@@ -1,5 +1,6 @@
 titanic_ui <- function() {
   shiny::fluidPage(
+    title = "Titanic SurvivR",
     theme = bslib::bs_theme(
       version = 5,
       bootswatch = "minty",
@@ -12,7 +13,7 @@ titanic_ui <- function() {
     titlePanel(
       shiny::tagList(
         shiny::img(src = "www/TTSR_logo.png", height = "50px", style = "margin-right: 10px;"),
-        shiny::tags$title("Titanic SurvivR")
+        "Titanic SurvivR"
       )
     ),
     shiny::sidebarLayout(
